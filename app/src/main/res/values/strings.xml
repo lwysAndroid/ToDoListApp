@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ToDoListApp</string>
+    <string name="create_note">Create Note</string>
+    <string name="set_note_title">Note Title</string>
+    <string name="set_note_message">Note message</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+</resources>
