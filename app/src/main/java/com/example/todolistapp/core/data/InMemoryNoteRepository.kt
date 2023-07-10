@@ -19,7 +19,6 @@ class InMemoryNoteRepository : NoteRepository {
             note.copy(id = newId).also {
                 noteHasMap[newId] = it
             }
-
         }
     }
 
@@ -28,7 +27,6 @@ class InMemoryNoteRepository : NoteRepository {
             return 1
         }
         return noteHasMap.keys.maxOf { it } + 1
-
     }
 
     override fun update(note: NoteModel) {
@@ -52,4 +50,5 @@ class InMemoryNoteRepository : NoteRepository {
             null
         }
     }
+
 }
