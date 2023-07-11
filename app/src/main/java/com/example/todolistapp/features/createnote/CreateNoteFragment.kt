@@ -69,14 +69,14 @@ class CreateNoteFragment : Fragment() {
 
         viewModel.noteCreated.observe(viewLifecycleOwner) {
             Toast.makeText(activity, "The note was created id:$it", Toast.LENGTH_SHORT).show()
-            hideKeyboard()
-            activity?.onBackPressedDispatcher?.onBackPressed()
+            goToPreviousScreen()
         }
 
         viewModel.noteDeleted.observe(viewLifecycleOwner) {
             noteTitleEt.setText("")
             noteMessageEt.setText("")
             Toast.makeText(activity, "The note was Deleted", Toast.LENGTH_SHORT).show()
+            goToPreviousScreen()
         }
 
         viewModel.emptyNoteNoDeleted.observe(viewLifecycleOwner) {
@@ -126,6 +126,11 @@ class CreateNoteFragment : Fragment() {
                 _activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             view?.let { imm.showSoftInput(currentEditText, 0) }
         }
+    }
+
+    private fun goToPreviousScreen() {
+        hideKeyboard()
+        activity?.onBackPressedDispatcher?.onBackPressed()
     }
 
 }
