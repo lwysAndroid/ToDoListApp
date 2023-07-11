@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todolistapp.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,6 +20,8 @@ class SeeNotesFragment : Fragment() {
     }
 
     private val viewModel by viewModels<SeeNotesViewModel>()
+    private lateinit var addNoteBtn: FloatingActionButton
+    private var doOnClickAddNote: () -> Unit = {}
     private lateinit var noteRecyclerView: RecyclerView
     private val notesAdapter = NotesAdapter()
     private var doOnClickItem: (Int) -> Unit = {}
@@ -37,6 +40,8 @@ class SeeNotesFragment : Fragment() {
     }
 
     private fun setUpView() {
+        view?.let { addNoteBtn = it.findViewById(R.id.addNoteBtn) }
+        addNoteBtn.setOnClickListener { doOnClickAddNote() }
         notesAdapter.setListener(doOnClickItem)
         noteRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -49,6 +54,10 @@ class SeeNotesFragment : Fragment() {
 
     fun setDoOnClickItem(listener: (Int) -> Unit) {
         doOnClickItem = listener
+    }
+
+    fun setDoOnClickAddNote(listener: () -> Unit) {
+        doOnClickAddNote = listener
     }
 
 }
