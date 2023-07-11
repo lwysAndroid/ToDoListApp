@@ -9,7 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todolistapp.R
-import com.example.todolistapp.core.model.NoteModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,8 +40,8 @@ class SeeNotesFragment : Fragment() {
             layoutManager = LinearLayoutManager(activity)
             adapter = notesAdapter
         }
-        (0..10).map { NoteModel(title = "Title $it", message = "Message $it") }.also {
-            notesAdapter.updateList(it)
+        viewModel.notes.observe(viewLifecycleOwner) { notesList ->
+            notesAdapter.updateList(list = notesList)
         }
     }
 
