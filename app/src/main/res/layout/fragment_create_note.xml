@@ -40,21 +40,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/noteTitleEt" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/saveNoteBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="@string/save"
+        app:icon="@drawable/baseline_save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/noteMessageEt" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/deleteNoteBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="32dp"
+        android:layout_margin="16dp"
         android:text="@string/delete"
+        app:icon="@drawable/baseline_delete"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/saveNoteBtn" />
 

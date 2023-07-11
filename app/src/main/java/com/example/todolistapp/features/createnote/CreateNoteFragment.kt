@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.todolistapp.R
@@ -84,13 +85,25 @@ class CreateNoteFragment : Fragment() {
         }
 
         saveNoteBtn.setOnClickListener { saveNote() }
-        deleteNoteBtn.setOnClickListener { deleteNote() }
+        deleteNoteBtn.setOnClickListener { showDialogToDeleteNote() }
     }
 
     private fun saveNote() {
         val title = noteTitleEt.text.toString()
         val message = noteMessageEt.text.toString()
         viewModel.saveNote(title = title, message = message)
+    }
+
+    private fun showDialogToDeleteNote() {
+        context?.let {
+            AlertDialog.Builder(it)
+                .setTitle(R.string.delete_note)
+                .setMessage(R.string.ask_to_delete_note)
+                .setPositiveButton(R.string.yes) { _, _ -> deleteNote() }
+                .setNegativeButton(R.string.no, null)
+                .setIcon(R.drawable.baseline_question_mark)
+                .show()
+        }
     }
 
     private fun deleteNote() {
