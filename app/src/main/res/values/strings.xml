@@ -5,4 +5,5 @@
     <string name="set_note_message">Note message</string>
     <string name="save">Save</string>
     <string name="delete">Delete</string>
+    <string name="all_notes">All Notes</string>
 </resources>
