@@ -1,19 +1,20 @@
 package com.example.todolistapp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
+import android.widget.FrameLayout
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.example.todolistapp.features.createnote.CreateNoteFragment
+import com.example.todolistapp.features.seenotes.SeeNotesFragment
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var showAllNotesBtn: Button
-    private lateinit var showCreateNoteBtn: Button
-
-    private lateinit var seeNotesContainer: View
-    private lateinit var createNoteContainer: View
+    private lateinit var fragmentContainer: FrameLayout
+    private lateinit var addNoteBtn: FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,23 +23,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpView() {
-        seeNotesContainer = findViewById(R.id.seeNotesContainer)
-        createNoteContainer = findViewById(R.id.createNoteContainer)
-        showAllNotesBtn = findViewById(R.id.showAllNotesBtn)
-        showCreateNoteBtn = findViewById(R.id.showCreateNoteBtn)
-
-        showAllNotesBtn.setOnClickListener { showAllNotes() }
-        showCreateNoteBtn.setOnClickListener { showCreateNote() }
+        fragmentContainer = findViewById(R.id.fragmentContainer)
+        addNoteBtn = findViewById(R.id.addNoteBtn)
+        goToListNote()
+        addNoteBtn.setOnClickListener { goToCreateNote() }
     }
 
-    private fun showAllNotes() {
-        seeNotesContainer.visibility = View.VISIBLE
-        createNoteContainer.visibility = View.GONE
+
+    private fun goToListNote() {
+        replaceFragment(SeeNotesFragment.newInstance())
     }
 
-    private fun showCreateNote() {
-        seeNotesContainer.visibility = View.GONE
-        createNoteContainer.visibility = View.VISIBLE
+    private fun goToCreateNote() {
+        replaceFragment(CreateNoteFragment.newInstance())
+    }
+
+    private fun replaceFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, fragment)
+            .addToBackStack(null).commit()
     }
 
 }
