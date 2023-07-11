@@ -1,9 +1,11 @@
 package com.example.todolistapp.features.createnote
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -12,6 +14,7 @@ import androidx.fragment.app.viewModels
 import com.example.todolistapp.R
 import com.example.todolistapp.core.model.NoteModel
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class CreateNoteFragment : Fragment() {
@@ -50,11 +53,13 @@ class CreateNoteFragment : Fragment() {
         saveNoteBtn = view.findViewById(R.id.saveNoteBtn)
         deleteNoteBtn = view.findViewById(R.id.deleteNoteBtn)
 
+        showKeyboard(noteTitleEt)
         viewModel.loadNote()
 
-        viewModel.noteUnderReview.observe(viewLifecycleOwner){currentNote->
+        viewModel.noteUnderReview.observe(viewLifecycleOwner) { currentNote ->
             noteTitleEt.setText(currentNote.title)
             noteMessageEt.setText(currentNote.message)
+            showKeyboard(noteTitleEt)
         }
 
         viewModel.invalidNoteFormat.observe(viewLifecycleOwner) {
@@ -63,6 +68,8 @@ class CreateNoteFragment : Fragment() {
 
         viewModel.noteCreated.observe(viewLifecycleOwner) {
             Toast.makeText(activity, "The note was created id:$it", Toast.LENGTH_SHORT).show()
+            hideKeyboard()
+            activity?.onBackPressedDispatcher?.onBackPressed()
         }
 
         viewModel.noteDeleted.observe(viewLifecycleOwner) {
@@ -88,6 +95,24 @@ class CreateNoteFragment : Fragment() {
 
     private fun deleteNote() {
         viewModel.deleteNote()
+    }
+
+    private fun hideKeyboard() {
+        activity?.let { _activity ->
+            val imm =
+                _activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            view?.let { imm.hideSoftInputFromWindow(it.windowToken, 0) }
+        }
+    }
+
+    private fun showKeyboard(currentEditText: EditText) {
+        currentEditText.requestFocus()
+        currentEditText.setSelection(currentEditText.length())
+        activity?.let { _activity ->
+            val imm =
+                _activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            view?.let { imm.showSoftInput(currentEditText, 0) }
+        }
     }
 
 }
