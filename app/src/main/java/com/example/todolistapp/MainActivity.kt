@@ -31,11 +31,15 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun goToListNote() {
-        replaceFragment(SeeNotesFragment.newInstance())
+        replaceFragment(SeeNotesFragment.newInstance().apply { setDoOnClickItem(::goToUpdateNote) })
     }
 
     private fun goToCreateNote() {
         replaceFragment(CreateNoteFragment.newInstance())
+    }
+
+    private fun goToUpdateNote(itemId: Int) {
+        replaceFragment(CreateNoteFragment.newInstance(noteId = itemId))
     }
 
     private fun replaceFragment(fragment: Fragment) {

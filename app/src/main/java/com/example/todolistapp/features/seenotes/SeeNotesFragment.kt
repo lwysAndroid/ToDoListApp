@@ -21,6 +21,7 @@ class SeeNotesFragment : Fragment() {
     private val viewModel by viewModels<SeeNotesViewModel>()
     private lateinit var noteRecyclerView: RecyclerView
     private val notesAdapter = NotesAdapter()
+    private var doOnClickItem: (Int) -> Unit = {}
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +37,7 @@ class SeeNotesFragment : Fragment() {
     }
 
     private fun setUpView() {
+        notesAdapter.setListener(doOnClickItem)
         noteRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = notesAdapter
@@ -43,6 +45,10 @@ class SeeNotesFragment : Fragment() {
         viewModel.notes.observe(viewLifecycleOwner) { notesList ->
             notesAdapter.updateList(list = notesList)
         }
+    }
+
+    fun setDoOnClickItem(listener: (Int) -> Unit) {
+        doOnClickItem = listener
     }
 
 }

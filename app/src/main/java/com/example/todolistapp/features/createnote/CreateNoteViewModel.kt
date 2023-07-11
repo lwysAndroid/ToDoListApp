@@ -29,6 +29,13 @@ class CreateNoteViewModel @Inject constructor(
     private val _emptyNoteNoDeleted: MutableLiveData<Unit> = MutableLiveData()
     val emptyNoteNoDeleted: LiveData<Unit> = _emptyNoteNoDeleted
 
+    private val _noteUnderReview: MutableLiveData<NoteModel> = MutableLiveData()
+    val noteUnderReview: LiveData<NoteModel> = _noteUnderReview
+
+    fun setNoteId(noteId: Int) {
+        this.noteId = noteId
+    }
+
     fun saveNote(title: String, message: String) {
         if (title.isBlank() || message.isBlank()) {
             _invalidNoteFormat.value = "The title and the message can't be empty"
@@ -53,6 +60,16 @@ class CreateNoteViewModel @Inject constructor(
             }
         } else {
             _emptyNoteNoDeleted.value = Unit
+        }
+    }
+
+    fun loadNote() {
+        if (noteId != NoteModel.DEFAULT_ID) {
+            viewModelScope.launch {
+                inMemoryNoteFlowRepository.getNoteById(noteId = noteId).also {
+                    _noteUnderReview.value = it
+                }
+            }
         }
     }
 
