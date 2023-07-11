@@ -32,6 +32,7 @@ class CreateNoteFragment : Fragment() {
     private val viewModel by viewModels<CreateNoteViewModel>()
     private lateinit var noteTitleEt: EditText
     private lateinit var noteMessageEt: EditText
+    private lateinit var backBtn: Button
     private lateinit var saveNoteBtn: Button
     private lateinit var deleteNoteBtn: Button
 
@@ -49,6 +50,7 @@ class CreateNoteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        backBtn = view.findViewById(R.id.backBtn)
         noteTitleEt = view.findViewById(R.id.noteTitleEt)
         noteMessageEt = view.findViewById(R.id.noteMessageEt)
         saveNoteBtn = view.findViewById(R.id.saveNoteBtn)
@@ -84,6 +86,7 @@ class CreateNoteFragment : Fragment() {
                 .show()
         }
 
+        backBtn.setOnClickListener { goToPreviousScreen() }
         saveNoteBtn.setOnClickListener { saveNote() }
         deleteNoteBtn.setOnClickListener { showDialogToDeleteNote() }
     }
