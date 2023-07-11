@@ -1,8 +1,9 @@
 package com.example.todolistapp.core.data
 
 import com.example.todolistapp.core.model.NoteModel
+import javax.inject.Inject
 
-class InMemoryNoteRepository : NoteRepository {
+class InMemoryNoteRepository @Inject constructor() : NoteRepository {
 
     private val noteHasMap = hashMapOf<Int, NoteModel>()
 
