@@ -31,7 +31,8 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun goToListNote() {
-        replaceFragment(SeeNotesFragment.newInstance().apply { setDoOnClickItem(::goToUpdateNote) })
+        val fragment = SeeNotesFragment.newInstance().apply { setDoOnClickItem(::goToUpdateNote) }
+        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, fragment).commit()
     }
 
     private fun goToCreateNote() {
