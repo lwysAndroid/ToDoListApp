@@ -32,6 +32,14 @@ class CreateNoteViewModel @Inject constructor(
     private val _noteUnderReview: MutableLiveData<NoteModel> = MutableLiveData()
     val noteUnderReview: LiveData<NoteModel> = _noteUnderReview
 
+    init {
+        viewModelScope.launch {
+            inMemoryNoteFlowRepository.getNoteById(noteId = noteId).collect() {
+                _noteUnderReview.value = it
+            }
+        }
+    }
+
     fun setNoteId(noteId: Int) {
         this.noteId = noteId
     }
@@ -53,7 +61,7 @@ class CreateNoteViewModel @Inject constructor(
     fun deleteNote() {
         if (noteId != NoteModel.DEFAULT_ID) {
             viewModelScope.launch {
-                inMemoryNoteFlowRepository.delete(noteId).also {
+                inMemoryNoteFlowRepository.delete(noteId = noteId).also {
                     noteId = NoteModel.DEFAULT_ID
                     _noteDeleted.value = it
                 }
@@ -66,9 +74,7 @@ class CreateNoteViewModel @Inject constructor(
     fun loadNote() {
         if (noteId != NoteModel.DEFAULT_ID) {
             viewModelScope.launch {
-                inMemoryNoteFlowRepository.getNoteById(noteId = noteId).also {
-                    _noteUnderReview.value = it
-                }
+                inMemoryNoteFlowRepository.getNoteById(noteId = noteId)
             }
         }
     }

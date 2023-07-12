@@ -9,6 +9,6 @@ interface NoteFlowRepository {
     suspend fun update(note: NoteModel):Int
     suspend fun delete(noteId: Int)
     fun getAllFlow(): Flow<List<NoteModel>>
-    suspend fun getNoteById(noteId: Int): NoteModel?
+    suspend fun getNoteById(noteId: Int): Flow<NoteModel?>
 
 }

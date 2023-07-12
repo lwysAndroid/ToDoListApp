@@ -14,6 +14,9 @@ class InMemoryNoteFlowRepository @Inject constructor() : NoteFlowRepository {
     private val flow = MutableSharedFlow<List<NoteModel>>()
     private suspend fun emit() = flow.emit(getAll())
 
+    private val flowNote = MutableSharedFlow<NoteModel?>()
+    private suspend fun emitNote(note: NoteModel?) = flowNote.emit(note)
+
 
     override suspend fun save(note: NoteModel): Int {
         val currentNodeId = note.id
@@ -61,12 +64,13 @@ class InMemoryNoteFlowRepository @Inject constructor() : NoteFlowRepository {
         return flow
     }
 
-    override suspend fun getNoteById(noteId: Int): NoteModel? {
-        return if (noteHasMap.containsKey(noteId)) {
-            noteHasMap[noteId]
+    override suspend fun getNoteById(noteId: Int): Flow<NoteModel?> {
+        if (noteHasMap.containsKey(noteId)) {
+            emitNote(note = noteHasMap[noteId])
         } else {
-            null
+            emitNote(note = null)
         }
+        return flowNote
     }
 
 }
