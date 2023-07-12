@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.todolistapp.core.data.InMemoryNoteFlowRepository
+import com.example.todolistapp.core.data.NoteFlowRepository
 import com.example.todolistapp.core.model.NoteModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateNoteViewModel @Inject constructor(
-    private val inMemoryNoteFlowRepository: InMemoryNoteFlowRepository
+    private val noteFlowRepository: NoteFlowRepository
 ) : ViewModel() {
 
     private var noteId = NoteModel.DEFAULT_ID
@@ -32,14 +32,6 @@ class CreateNoteViewModel @Inject constructor(
     private val _noteUnderReview: MutableLiveData<NoteModel> = MutableLiveData()
     val noteUnderReview: LiveData<NoteModel> = _noteUnderReview
 
-    init {
-        viewModelScope.launch {
-            inMemoryNoteFlowRepository.getNoteById(noteId = noteId).collect() {
-                _noteUnderReview.value = it
-            }
-        }
-    }
-
     fun setNoteId(noteId: Int) {
         this.noteId = noteId
     }
@@ -50,7 +42,7 @@ class CreateNoteViewModel @Inject constructor(
         } else {
             viewModelScope.launch {
                 val newNote = NoteModel(id = noteId, title = title, message = message)
-                inMemoryNoteFlowRepository.save(newNote).also {
+                noteFlowRepository.save(newNote).also {
                     noteId = it
                     _noteCreated.value = it
                 }
@@ -61,7 +53,7 @@ class CreateNoteViewModel @Inject constructor(
     fun deleteNote() {
         if (noteId != NoteModel.DEFAULT_ID) {
             viewModelScope.launch {
-                inMemoryNoteFlowRepository.delete(noteId = noteId).also {
+                noteFlowRepository.delete(noteId = noteId).also {
                     noteId = NoteModel.DEFAULT_ID
                     _noteDeleted.value = it
                 }
@@ -74,7 +66,9 @@ class CreateNoteViewModel @Inject constructor(
     fun loadNote() {
         if (noteId != NoteModel.DEFAULT_ID) {
             viewModelScope.launch {
-                inMemoryNoteFlowRepository.getNoteById(noteId = noteId)
+                noteFlowRepository.getNoteById(noteId = noteId).collect() {
+                    _noteUnderReview.value = it
+                }
             }
         }
     }

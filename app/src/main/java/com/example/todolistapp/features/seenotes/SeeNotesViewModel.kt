@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.todolistapp.core.data.InMemoryNoteFlowRepository
+import com.example.todolistapp.core.data.NoteFlowRepository
 import com.example.todolistapp.core.model.NoteModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SeeNotesViewModel @Inject constructor(
-    private val inMemoryNoteFlowRepository: InMemoryNoteFlowRepository
+    private val noteFlowRepository: NoteFlowRepository
 ) : ViewModel() {
 
     private val _notes: MutableLiveData<List<NoteModel>> = MutableLiveData()
@@ -24,7 +24,7 @@ class SeeNotesViewModel @Inject constructor(
 
     private fun getNotes() {
         viewModelScope.launch {
-            inMemoryNoteFlowRepository.getAllFlow().collect() {
+            noteFlowRepository.getAllFlow().collect() {
                 _notes.value = it
             }
         }
