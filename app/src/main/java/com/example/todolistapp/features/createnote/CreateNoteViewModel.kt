@@ -66,8 +66,10 @@ class CreateNoteViewModel @Inject constructor(
     fun loadNote() {
         if (noteId != NoteModel.DEFAULT_ID) {
             viewModelScope.launch {
-                noteFlowRepository.getNoteById(noteId = noteId).collect() {
-                    _noteUnderReview.value = it
+                noteFlowRepository.getNoteById(noteId = noteId).collect() { noteGetById ->
+                    if (noteGetById != null) {
+                        _noteUnderReview.value = noteGetById
+                    }
                 }
             }
         }

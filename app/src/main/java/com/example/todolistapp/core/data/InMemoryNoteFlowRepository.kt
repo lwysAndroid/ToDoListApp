@@ -14,7 +14,7 @@ class InMemoryNoteFlowRepository @Inject constructor() : NoteFlowRepository {
     private val flow = MutableSharedFlow<List<NoteModel>>()
     private suspend fun emit() = flow.emit(getAll())
 
-    private val flowNote = MutableSharedFlow<NoteModel?>()
+    private val flowNote = MutableSharedFlow<NoteModel?>(replay = 1)
     private suspend fun emitNote(note: NoteModel?) = flowNote.emit(note)
 
 
